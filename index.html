@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aprendo palabras en Q'eqchi'</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden}
+body{font-family:"Trebuchet MS",Arial,sans-serif;background:#fff3c4;color:#1d3557;min-height:100vh;display:flex;justify-content:center;padding:16px}
+#app{width:100%;max-width:820px;background:#fff;border:6px solid #2a9d8f;border-radius:28px;padding:24px;text-align:center;box-shadow:0 8px 0 #1f776c}
+h1{font-size:clamp(28px,6vw,48px);margin:8px 0;color:#e76f51}
+h2{font-size:clamp(22px,4.5vw,34px);margin:8px 0}
+p{font-size:clamp(18px,3.5vw,26px);margin:8px 0}
+.tag{display:inline-block;background:#264653;color:#fff;border-radius:20px;padding:6px 16px;font-size:clamp(16px,3vw,22px);font-weight:bold}
+.img{font-size:clamp(100px,26vw,200px);line-height:1.1;margin:8px 0}
+.word{font-size:clamp(44px,12vw,90px);font-weight:bold;color:#e76f51;margin:4px 0}
+.opts{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:16px 0}
+button{font-family:inherit;font-size:clamp(24px,5vw,38px);font-weight:bold;color:#fff;background:#2a9d8f;border:4px solid #1f776c;border-radius:22px;padding:16px 28px;min-width:150px;min-height:70px;cursor:pointer;box-shadow:0 6px 0 #1f776c;transition:transform .1s,background .15s;touch-action:manipulation}
+button:hover:not(:disabled){background:#35b8a8;transform:translateY(-3px)}
+button:active:not(:disabled){transform:translateY(4px);box-shadow:0 2px 0 #1f776c}
+button.big{background:#e76f51;border-color:#b5482c;box-shadow:0 6px 0 #b5482c}
+button.big:hover:not(:disabled){background:#f08467}
+button.imgbtn{background:#fff7e0;color:#1d3557;border-color:#f4a261;box-shadow:0 6px 0 #f4a261;font-size:clamp(60px,16vw,110px);padding:10px 20px;min-width:0}
+button.imgbtn:hover:not(:disabled){background:#ffe8b0}
+button.ok{background:#2e9e44!important;border-color:#1b6b2c!important;color:#fff!important;box-shadow:0 6px 0 #1b6b2c!important}
+button.bad{background:#d62839!important;border-color:#8e1521!important;color:#fff!important;box-shadow:0 6px 0 #8e1521!important}
+button:disabled{cursor:not-allowed;opacity:.6}
+button.ok:disabled,button.bad:disabled{opacity:1}
+#fb{min-height:90px}
+.good{color:#1b7a31;font-size:clamp(28px,6vw,44px);font-weight:bold}
+.try{color:#c1121f;font-size:clamp(28px,6vw,44px);font-weight:bold}
+.bar{height:16px;background:#e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:8px}
+.bar div{height:100%;background:#f4a261;transition:width .3s}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+var IMG={"OCHOCH":"🏠","HA'":"💧","IXIIM":"🌽","CHEE'":"🌳","TZ'I'":"🐶","JOLOM":"🧒","NA'":"👩","YUWA'":"👨","CHIKOP":"🐾","JUN":"1️⃣"};
+var ES={"OCHOCH":"casa","HA'":"agua","IXIIM":"maíz","CHEE'":"árbol","TZ'I'":"perro","JOLOM":"cabeza","NA'":"mamá","YUWA'":"papá"};
+var STEPS=[];
+var A1=["OCHOCH","HA'","IXIIM","CHEE'","TZ'I'"];
+A1.forEach(function(w){STEPS.push({t:"learn",act:"Actividad 1 — Reconocimiento",w:w})});
+[["OCHOCH",["OCHOCH","HA'","IXIIM"]],["HA'",["HA'","CHEE'","JUN"]],["IXIIM",["IXIIM","OCHOCH","TZ'I'"]],["CHEE'",["CHEE'","JOLOM","NA'"]],["TZ'I'",["TZ'I'","YUWA'","HA'"]]].forEach(function(q){
+ STEPS.push({t:"word",act:"Actividad 2 — ¿Cuál es la palabra?",ans:q[0],opts:q[1]})});
+[["OCHOCH",["OCHOCH","HA'","TZ'I'"]],["HA'",["HA'","CHEE'","OCHOCH"]],["TZ'I'",["TZ'I'","IXIIM","HA'"]]].forEach(function(q){
+ STEPS.push({t:"img",act:"Actividad 3 — Relaciona palabra e imagen",ans:q[0],opts:q[1]})});
+[["JOLOM",["JOLOM","OCHOCH","HA'"]],["NA'",["NA'","CHEE'","JUN"]],["YUWA'",["YUWA'","NA'","JUN"]]].forEach(function(q){
+ STEPS.push({t:"word",act:"Actividad 4 — Reto final",ans:q[0],opts:q[1]})});
+var app=document.getElementById("app"),cur=0,locked=false;
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5})}
+function start(){cur=0;render()}
+function home(){
+ app.innerHTML='<div class="img">📚</div><h1>Aprendo palabras en Q\'eqchi\'</h1><h2>Observo, leo y relaciono</h2><p>Selecciona la palabra que corresponde a cada imagen.</p><div class="opts"><button class="big" id="go">COMENZAR</button></div>';
+ document.getElementById("go").addEventListener("click",start);
+}
+function end(){
+ app.innerHTML='<div class="img">🎉</div><h1>¡Felicidades!</h1><p>Completaste todas las actividades.</p><div class="opts"><button class="big" id="re">JUGAR DE NUEVO</button></div>';
+ document.getElementById("re").addEventListener("click",start);
+}
+function render(){
+ if(cur>=STEPS.length)return end();
+ var s=STEPS[cur];locked=false;
+ var h='<div class="bar"><div style="width:'+(cur/STEPS.length*100)+'%"></div></div><span class="tag">'+s.act+'</span>';
+ if(s.t==="learn"){
+  h+='<div class="img">'+IMG[s.w]+'</div><div class="word">'+s.w+'</div><h2>'+ES[s.w]+'</h2><div class="opts"><button class="big" id="nx">CONTINUAR</button></div>';
+  app.innerHTML=h;document.getElementById("nx").addEventListener("click",next);return;
+ }
+ if(s.t==="word"){
+  h+='<div class="img">'+IMG[s.ans]+'</div><h2>¿Cuál es la palabra para '+ES[s.ans]+'?</h2><div class="opts" id="opts"></div>';
+ }else{
+  h+='<div class="word">'+s.ans+'</div><h2>Haz clic en la imagen correcta.</h2><div class="opts" id="opts"></div>';
+ }
+ h+='<div id="fb"></div><div class="opts" id="nxw"></div>';
+ app.innerHTML=h;
+ var box=document.getElementById("opts");
+ shuffle(s.opts).forEach(function(o){
+  var b=document.createElement("button");b.type="button";
+  if(s.t==="img"){b.className="imgbtn";b.textContent=IMG[o];b.setAttribute("aria-label",ES[o])}else b.textContent=o;
+  b.addEventListener("click",function(){answer(b,o===s.ans)});
+  b.dataset.v=o;box.appendChild(b);
+ });
+}
+function answer(b,ok){
+ if(locked)return;
+ var fb=document.getElementById("fb");
+ if(ok){
+  locked=true;b.classList.add("ok");
+  Array.prototype.forEach.call(document.querySelectorAll("#opts button"),function(x){x.disabled=true});
+  fb.innerHTML='<div class="good">¡CORRECTO!</div><p>Muy bien.</p>';
+  var n=document.getElementById("nxw");n.innerHTML='<button class="big" id="nx">SIGUIENTE</button>';
+  document.getElementById("nx").addEventListener("click",next);
+ }else{
+  b.classList.add("bad");b.disabled=true;
+  fb.innerHTML='<div class="try">INTENTA DE NUEVO</div><p>Esa respuesta no es correcta. Observa nuevamente la imagen.</p>';
+ }
+}
+function next(){cur++;render()}
+home();
+</script>
+</body>
+</html>
