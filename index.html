@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aprendo palabras en Q'eqchi'</title>
+<title>Aprendo palabras en Q'eqchi' </title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;overflow-x:hidden}
@@ -52,7 +52,7 @@ var app=document.getElementById("app"),cur=0,locked=false;
 function shuffle(a){return a.slice().sort(function(){return Math.random()-.5})}
 function start(){cur=0;render()}
 function home(){
- app.innerHTML='<div class="img">📚</div><h1>Aprendo palabras en Q\'eqchi\'</h1><h2>Observo, leo y relaciono</h2><p>Selecciona la palabra que corresponde a cada imagen.</p><div class="opts"><button class="big" id="go">COMENZAR</button></div>';
+ app.innerHTML='<div class="img">📚</div><h1>Aprendo palabras en Q\'eqchi\'</h1><h2 style="color:#7b2cbf;">Linda Maité López del Valle</h2><h2>Observo, leo y relaciono</h2><p>Selecciona la palabra que corresponde a cada imagen.</p><div class="opts"><button class="big" id="go">COMENZAR</button></div>';
  document.getElementById("go").addEventListener("click",start);
 }
 function end(){
